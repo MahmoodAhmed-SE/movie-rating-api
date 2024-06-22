@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type RequestBody struct {
@@ -22,6 +24,22 @@ func handleUserRegistration(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	// saving user data into postgresdb
+	hashedPasswordBytes, err := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+		switch err.(type) {
+		case bcrypt.InvalidCostError:
+			http.Error(w, "Invalid cost parameter", http.StatusBadRequest)
+		case bcrypt.InvalidHashPrefixError:
+			http.Error(w, "Invalid hash prefix", http.StatusBadRequest)
+		case bcrypt.HashVersionTooNewError:
+			http.Error(w, "Hash version too new", http.StatusBadRequest)
+		default:
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
+		log.Printf("Error generating hash: %v", err)
+		return
+	}
 
 }
 
