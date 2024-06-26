@@ -3,7 +3,6 @@ package config
 import (
 	"log"
 	"os"
-	"path"
 
 	"github.com/jackc/pgx"
 	"github.com/joho/godotenv"
@@ -20,10 +19,10 @@ type Config struct {
 }
 
 func LoadConfig() Config {
-	err := godotenv.Load(path.Clean("../../.env"))
+	err := godotenv.Load()
 
 	if err != nil {
-		log.Fatalf("Error loading environment variables from %s: %v", path.Clean("../../.env"), err)
+		log.Fatalf("Error loading environment variables: %v", err)
 	}
 
 	postgresConfig := pgx.ConnConfig{

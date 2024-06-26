@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"movie-rating-api-go/internals/database"
+	"movie-rating-api-go/internals/psql_errors"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
@@ -48,8 +49,14 @@ func HandleUserRegistration(w http.ResponseWriter, r *http.Request) {
 
 	// var userId int
 	var userId int
-	if insertionRow.Scan(&userId) != nil {
-		log.Printf("Error inserting new user "+data.Username+": %v", insertionRow.Scan())
+	if err := insertionRow.Scan(&userId); err != nil {
+		if err.Error() == psql_errors.UniqueConstraintViolation {
+			http.Error(w, "Username already exists!", http.StatusConflict)
+			return
+		}
+
+		log.Printf("Error inserting new user "+data.Username+": %v", err)
+
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
