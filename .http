@@ -1,7 +1,17 @@
-POST http://127.0.0.1:8080/api/register-user HTTP/1.1
+# POST http://127.0.0.1:4040/api/register-user HTTP/1.1
+# content-type: application/json
+
+# {
+#     "username": "MahmoodAh",
+#     "password": "myNameIsMahmood"
+# }
+
+
+GET http://127.0.0.1:4040/api/retrieve-movies HTTP/1.1
 content-type: application/json
 
 {
-    "username": "Khalidd",
-    "password": "myNameIsMahmood"
+    "username": "MahmoodAh",
+    "password": "myNameIsMahmood",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjAxNjQzNTcsImlkIjoiNyJ9.ahtApUpTA4K8bT6dR4EiseKtxdISTPB-C85GuzyTAwE"
 }

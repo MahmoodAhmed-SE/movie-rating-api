@@ -9,12 +9,6 @@ import (
 	"net/http"
 )
 
-type USER struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
 func main() {
 	config := config.LoadConfig()
 
@@ -25,12 +19,12 @@ func main() {
 	conn := database.GetConn()
 	defer conn.Close()
 
-	routes.SetupRoutes()
+	mux := routes.SetupRoutes()
 
 	log.Printf("Server is starting up on port: %d", config.ServerConfig.Port)
 
 	address := fmt.Sprintf("%s:%d", config.ServerConfig.IP, config.ServerConfig.Port)
-	if err := http.ListenAndServe(address, nil); err != nil {
+	if err := http.ListenAndServe(address, mux); err != nil {
 		log.Fatalf("Error starting server: %s", err)
 	}
 

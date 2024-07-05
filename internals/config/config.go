@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	constants "movie-rating-api-go/internals"
 	"os"
 
 	"github.com/jackc/pgx"
@@ -21,13 +22,23 @@ type Config struct {
 func LoadConfig() Config {
 	err := godotenv.Load()
 
+	_, errUserEnv:= os.LookupEnv(constants.EnvDBUser)
+	_, errPassEnv:= os.LookupEnv(constants.EnvDBPass)
+	if !errUserEnv {
+		log.Fatalf("DB User environment variable error: %v", errUserEnv)
+	}
+	if !errPassEnv {
+		log.Fatalf("DB Pass environment variable error: %v", errPassEnv)
+	}
+
+	
 	if err != nil {
 		log.Fatalf("Error loading environment variables: %v", err)
 	}
 
 	postgresConfig := pgx.ConnConfig{
-		User:     os.Getenv("DB_USER"),
-		Password: os.Getenv("DB_PASS"),
+		User:     os.Getenv(constants.EnvDBUser),
+		Password: os.Getenv(constants.EnvDBPass),
 		Host:     "localhost",
 		Database: "moviesdb",
 		Port:     5432,
@@ -35,7 +46,7 @@ func LoadConfig() Config {
 
 	serverConfig := ServerConfig{
 		IP:   "127.0.0.1",
-		Port: 8080,
+		Port: 4040,
 	}
 
 	return Config{
