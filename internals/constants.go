@@ -1,6 +1,6 @@
-package constants;
+package constants
 
 const (
-    EnvDBUser string = "DB_USER"
-    EnvDBPass string = "DB_PASS"
+	EnvDBUser string = "POSTGRES_USER"
+	EnvDBPass string = "POSTGRES_PASSWORD"
 )

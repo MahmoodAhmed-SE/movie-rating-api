@@ -77,5 +77,5 @@ func HandleUserRegistration(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s))
 	w.WriteHeader(200)
 	w.Write([]byte(s))
-	log.Printf("Insertion Id:%d\n%s", userId, s)
+	log.Printf("Insertion Id:%d", userId)
 }
