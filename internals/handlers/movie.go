@@ -14,7 +14,7 @@ type movieRetrievelRequestBody struct {
 	Token    string `json:"token"`
 }
 
-func HandleMoviesRetrievel(w http.ResponseWriter, r *http.Request) {
+func MoviesRetrievel(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var data movieRetrievelRequestBody
@@ -53,7 +53,6 @@ func HandleMoviesRetrievel(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return
 		}
-		log.Printf("movie: %v", movie)
 		movies = append(movies, movie)
 	}
 
@@ -63,6 +62,4 @@ func HandleMoviesRetrievel(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }

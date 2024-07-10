@@ -9,8 +9,8 @@ import (
 
 func SetupRoutes() http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/api/register-user", handlers.HandleUserRegistration)
-	mux.Handle("/api/retrieve-movies", middlewares.JWTAuthorization(http.HandlerFunc(handlers.HandleMoviesRetrievel)))
+	mux.HandleFunc("/api/register-user", handlers.UserRegistration)
+	mux.Handle("/api/retrieve-movies", middlewares.JWTAuthorization(http.HandlerFunc(handlers.MoviesRetrievel)))
 
 	return mux
 }

@@ -7,11 +7,11 @@
 # }
 
 
-GET http://127.0.0.1:4040/api/retrieve-movies HTTP/1.1
+POST http://127.0.0.1:4040/api/retrieve-movies HTTP/1.1
 content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjA1OTE0NTUsImlkIjoiMSJ9.3Lgjzygf-0TVEFaACtinef0_50jjuKwo0moxS_HSLQ0
 
 {
     "username": "MahmoodAh",
-    "password": "myNameIsMahmood",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjAxNjQzNTcsImlkIjoiNyJ9.ahtApUpTA4K8bT6dR4EiseKtxdISTPB-C85GuzyTAwE"
+    "password": "myNameIsMahmood"
 }
