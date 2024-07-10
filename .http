@@ -1,4 +1,4 @@
-# POST http://127.0.0.1:4040/api/register-user HTTP/1.1
+# POST http://127.0.0.1:4040/api/v1/register-user HTTP/1.1
 # content-type: application/json
 
 # {
@@ -7,9 +7,18 @@
 # }
 
 
-POST http://127.0.0.1:4040/api/retrieve-movies HTTP/1.1
+# POST http://127.0.0.1:4040/api/v1/retrieve-movies HTTP/1.1
+# content-type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjA1OTE0NTUsImlkIjoiMSJ9.3Lgjzygf-0TVEFaACtinef0_50jjuKwo0moxS_HSLQ0
+
+# {
+#     "username": "MahmoodAh",
+#     "password": "myNameIsMahmood"
+# }
+
+
+POST http://127.0.0.1:4040/api/v1/login-user HTTP/1.1
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjA1OTE0NTUsImlkIjoiMSJ9.3Lgjzygf-0TVEFaACtinef0_50jjuKwo0moxS_HSLQ0
 
 {
     "username": "MahmoodAh",
