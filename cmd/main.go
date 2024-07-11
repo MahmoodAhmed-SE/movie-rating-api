@@ -5,6 +5,7 @@ import (
 	"log"
 	"movie-rating-api-go/internals/config"
 	"movie-rating-api-go/internals/database"
+	initialdata "movie-rating-api-go/internals/initial_data"
 	"movie-rating-api-go/internals/routes"
 	"net/http"
 )
@@ -18,6 +19,9 @@ func main() {
 
 	conn := database.GetConn()
 	defer conn.Close()
+
+	//
+	initialdata.StartMovieStartupInsertions()
 
 	mux := routes.SetupRoutes()
 
