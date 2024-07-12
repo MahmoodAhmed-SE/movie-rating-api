@@ -37,6 +37,26 @@ func StartMovieStartupInsertions() {
 	}
 	var conn *pgx.Conn = database.GetConn()
 
+	if assurance, selectErr := conn.Query("SELECT * FROM MOVIES;"); selectErr != nil {
+		log.Fatalf("Error in select movies query: %v", selectErr)
+		return
+	} else {
+		defer assurance.Close()
+
+		number_of_rows := 0
+		for assurance.Next() {
+			number_of_rows++
+			if number_of_rows >= 50 {
+				break
+			}
+		}
+
+		if number_of_rows == 50 {
+			log.Println("Initial rows are already added. There is no need for movies startup insertions.")
+			return
+		}
+	}
+
 	for _, movie := range movies {
 		resp, fetchErr := http.Get(fmt.Sprintf("%s%d", os.Getenv(constants.EnvMovieAPI), movie.Id))
 		if fetchErr != nil {
