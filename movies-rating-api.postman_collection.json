@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "187400dc-a8d2-41e5-a6d1-a6d5fff9388d",
+		"name": "movies-rating-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28040870"
+	},
+	"item": [
+		{
+			"name": "Login Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"M\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4040/api/v1/login-user",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"api",
+						"v1",
+						"login-user"
+					]
+				},
+				"description": "### GET /api/v1/login-user\n\nThis endpoint is used to log in a user.\n\n#### Request\n\n- Method: GET\n    \n- URL: `localhost:4040/api/v1/login-user`\n    \n- Headers: Not specified\n    \n- Request Body:\n    - username (text, required): The username of the user.\n        \n    - password (text, required): The password of the user.\n        \n\n#### Response\n\n- Status: 200\n    \n- Content-Type: application/json\n    \n- Body:\n    \n    ``` json\n    {\n      \"token\": \"\"\n    }\n    \n     ```\n    \n\n#### Response JSON Schema\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"token\": {\n      \"type\": \"string\"\n    }\n  }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve All Movies Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjE0MDM2MTUsImlkIjo4fQ.A_JnFHVQSzMSMmjainpbzhx6SYBPNTa3vRKZYf3f5ww",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4040/api/v1/retrieve-movies",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"api",
+						"v1",
+						"retrieve-movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registeration Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"M\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4040/api/v1/register-user",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"api",
+						"v1",
+						"register-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating a Movie Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjEzODU3MDEsImlkIjo4fQ.iYFvsvTArnUR0CqBkdr5rA_tDgYbKL8gxsL3Ld9kotQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"movie_id\": 6,\n    \"rating\": 5,\n    \"review\": {\n        \"string\": \"\",\n        \"isValid\": false\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4040/api/v1/rate-movie",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"api",
+						"v1",
+						"rate-movie"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
