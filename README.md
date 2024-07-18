@@ -1,21 +1,18 @@
+<h1 align="center">Movie Rating API</h1>
 
-<center>
-
-# Movie Rating API
-</center>
 <p align="center">
   <img src="https://img.shields.io/badge/GO-1.22.4-blue?style=for-the-badge" />
   <img src="https://img.shields.io/badge/PostgreSQL-16-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/License-Mit-green?style=for-the-badge
-  " />
+  <img src="https://img.shields.io/badge/License-Mit-green?style=for-the-badge" />
 </p>
-
+<br><br>
 ## Background
-This project is made for the purpose of learning and practicing **Go language**, and the backend server side development. Its implementation is inspired by the user requirements you can find in [user-requirements](https://github.com/MahmoodAhmed-SE/movie-rating-api-go/blob/main/user-requirements.md')</a>. However, I will not follow the requirements strictly.
+This project is made for the purpose of learning and practicing **Go language**, and the backend server side development. Its implementation is inspired by the user requirements you can find in <a href="https://github.com/MahmoodAhmed-SE/movie-rating-api-go/blob/main/user-requirements.md">user-requirements</a>. However, I will not follow the requirements strictly.
 
 ### Note:
-<mark>For learning and testing purposes, free and open liscense films will be used.</mark>
+<mark>For learning and testing purposes, free and open license films/videos will be used.</mark>
 
+<br><br>
 
 ## Featuring
 ### User Management:
