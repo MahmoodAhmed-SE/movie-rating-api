@@ -2,15 +2,11 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"movie-rating-api-go/internals/database"
 	"movie-rating-api-go/internals/psql_errors"
 	"net/http"
-	"os"
-	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -26,7 +22,8 @@ func UserRegistration(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 
 	if err := decoder.Decode(&data); err != nil {
-		log.Fatal(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		log.Printf("Error decoding registeration request body: %v", err)
 		return
 	}
 
@@ -50,30 +47,11 @@ func UserRegistration(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		log.Printf("Error inserting new user "+data.Username+": %v", err)
-
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
+
+		log.Printf("Error inserting new user %s: %v", data.Username, err)
 		return
 	}
 
-	var (
-		key []byte
-		t   *jwt.Token
-	)
-
-	key = []byte(os.Getenv("JWT_KEY"))
-	t = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":  fmt.Sprint(userId),
-		"exp": time.Now().Add(time.Hour * 24).Unix(),
-	})
-
-	s, err := t.SignedString(key)
-	if err != nil {
-		log.Printf("Error returning signed jwt token: %v", err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s))
 	w.WriteHeader(200)
 }

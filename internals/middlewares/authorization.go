@@ -3,6 +3,7 @@ package middlewares
 import (
 	"fmt"
 	"log"
+	constants "movie-rating-api-go/internals"
 	"net/http"
 	"os"
 	"time"
@@ -19,29 +20,30 @@ func JWTAuthorization(next http.Handler) http.Handler {
 
 		headerToken := r.Header.Get("Authorization")
 		if headerToken == "" {
-			log.Printf("Error token is not present in request header.")
 			http.Error(w, "Unauthorized request", http.StatusUnauthorized)
+			log.Printf("Error token is not present in request header.")
+			return
 		}
 
-		_, scanErr := fmt.Sscanf(headerToken, "bearer %s", &headerToken)
+		_, scanErr := fmt.Sscanf(headerToken, "Bearer %s", &headerToken)
 		if scanErr != nil {
-			log.Printf("Error scanning header authorization token: %v", scanErr)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error scanning header authorization token: %v", scanErr)
 			return
 		}
 
 		// TO-DO: make sure user exists.
-		key := []byte(os.Getenv("JWT_KEY"))
+		key := []byte(os.Getenv(constants.EnvJWTSecretKey))
 		token, err := jwt.Parse(headerToken, func(t *jwt.Token) (interface{}, error) {
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 			}
 			return key, nil
 		})
-
+		log.Println(headerToken)
 		if err != nil {
+			http.Error(w, "Bad request", http.StatusBadRequest)
 			log.Printf("Error parsing token: %v", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 

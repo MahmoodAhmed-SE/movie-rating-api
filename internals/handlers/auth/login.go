@@ -21,6 +21,10 @@ type loginRequestBody struct {
 	Password string `json:"password"`
 }
 
+type loginResponseBody struct {
+	Token string `json:"token"`
+}
+
 func UserLogin(w http.ResponseWriter, r *http.Request) {
 	var data loginRequestBody
 
@@ -36,9 +40,10 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			http.Error(w, "Bad request", http.StatusBadRequest)
+			log.Printf("No user with username %s found.", data.Username)
 		} else {
-			log.Printf("Error while querying user: %v", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error while querying user: %v", err)
 		}
 
 		return
@@ -65,7 +70,6 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	})
 
 	tknString, signingErr := tkn.SignedString(key)
-
 	if signingErr != nil {
 		log.Printf("Error Signing token: %v", signingErr)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -73,6 +77,18 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", tknString))
-	w.WriteHeader(http.StatusOK)
+	var res loginResponseBody
+	res.Token = fmt.Sprintf("Bearer %s", tknString)
+
+	jsonRes, resErr := json.Marshal(res)
+	if resErr != nil {
+		log.Printf("Error parsing response object res to json: %v", resErr)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+
+		return
+	}
+
+	header := w.Header()
+	header.Set("Content-Type", "application/json")
+	w.Write(jsonRes)
 }
