@@ -9,7 +9,10 @@ func GetUser(username string) (models.USER, error) {
 	var user models.USER
 
 	conn := database.GetConn()
-	row := conn.QueryRow("SELECT * FROM USERS WHERE username = $1;", username)
+	row := conn.QueryRow(`
+		SELECT * FROM USERS 
+		WHERE username = $1;`,
+		username)
 
 	if err := row.Scan(
 		&user.ID,
