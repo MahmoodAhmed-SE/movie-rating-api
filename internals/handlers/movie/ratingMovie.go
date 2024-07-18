@@ -19,6 +19,8 @@ type RatingRequestBody struct {
 }
 
 func RatingMovie(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+
 	user_id, ok := r.Context().Value(constants.UserIdKey).(int)
 	if !ok {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -37,7 +39,7 @@ func RatingMovie(w http.ResponseWriter, r *http.Request) {
 
 	// Check whether user has already rated this movie or an error occured while querying
 	if err == nil {
-		http.Error(w, fmt.Sprintf("Movie has already been rated with %v/10", rating), http.StatusConflict)
+		http.Error(w, fmt.Sprintf("Movie has already been rated with %v out of 10", rating), http.StatusConflict)
 		return
 	} else if err != pgx.ErrNoRows {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -52,4 +54,6 @@ func RatingMovie(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error while querying inserting a rating: %v.", err)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 }
