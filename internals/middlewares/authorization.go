@@ -20,13 +20,13 @@ func JWTAuthorization(next http.Handler) http.Handler {
 		headerToken := r.Header.Get("Authorization")
 		if headerToken == "" {
 			log.Printf("Error token is not present in request header.")
-			http.Error(w, "unauthorized request", http.StatusUnauthorized)
+			http.Error(w, "Unauthorized request", http.StatusUnauthorized)
 		}
 
 		_, scanErr := fmt.Sscanf(headerToken, "bearer %s", &headerToken)
 		if scanErr != nil {
 			log.Printf("Error scanning header authorization token: %v", scanErr)
-			http.Error(w, "internal server error", http.StatusInternalServerError)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 
@@ -41,17 +41,17 @@ func JWTAuthorization(next http.Handler) http.Handler {
 
 		if err != nil {
 			log.Printf("Error parsing token: %v", err)
-			http.Error(w, "internal server error", http.StatusInternalServerError)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 
 		if !token.Valid {
-			http.Error(w, "bad request", http.StatusBadRequest)
+			http.Error(w, "Bad request", http.StatusBadRequest)
 			log.Println("invalid token")
 			return
 		}
 		if expDate, err := token.Claims.GetExpirationTime(); err != nil || expDate.Unix() < time.Now().Unix() {
-			http.Error(w, "bad request", http.StatusBadRequest)
+			http.Error(w, "Bad request", http.StatusBadRequest)
 			log.Printf("expired token: %v", err)
 			return
 		}

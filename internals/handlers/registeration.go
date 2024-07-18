@@ -70,7 +70,7 @@ func UserRegistration(w http.ResponseWriter, r *http.Request) {
 	s, err := t.SignedString(key)
 	if err != nil {
 		log.Printf("Error returning signed jwt token: %v", err)
-		http.Error(w, "internal server error", http.StatusInternalServerError)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 

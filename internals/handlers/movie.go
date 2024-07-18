@@ -21,7 +21,7 @@ func MoviesRetrievel(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&data); err != nil {
 		log.Printf("Error decoding movies retrievel api request body: %v", err)
-		http.Error(w, "bad request", http.StatusBadRequest)
+		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
 
@@ -30,7 +30,7 @@ func MoviesRetrievel(w http.ResponseWriter, r *http.Request) {
 	rows, err := conn.Query("SELECT * FROM MOVIES;")
 	if err != nil {
 		log.Printf("Error retrieving all movies: %v", err)
-		http.Error(w, "internal server error", http.StatusInternalServerError)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 	defer rows.Close()
@@ -50,7 +50,7 @@ func MoviesRetrievel(w http.ResponseWriter, r *http.Request) {
 			&movie.Duration,
 		); scanningErr != nil {
 			log.Printf("Error scanning to movie model %v", scanningErr)
-			http.Error(w, "internal server error", http.StatusInternalServerError)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 		movies = append(movies, movie)
@@ -59,7 +59,7 @@ func MoviesRetrievel(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 	if jsonEncodingErr := encoder.Encode(movies); jsonEncodingErr != nil {
 		log.Printf("Error encoding movies array/slice to response writer %v", jsonEncodingErr)
-		http.Error(w, "internal server error", http.StatusInternalServerError)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 }

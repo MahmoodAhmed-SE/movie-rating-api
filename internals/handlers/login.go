@@ -27,7 +27,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&data); err != nil {
 		log.Printf("Error decoding body: %v", err)
-		http.Error(w, "bad request", http.StatusBadRequest)
+		http.Error(w, "Bad request", http.StatusBadRequest)
 
 		return
 	}
@@ -35,17 +35,17 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	user, err := services.GetUser(data.Username)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			http.Error(w, "bad request", http.StatusBadRequest)
+			http.Error(w, "Bad request", http.StatusBadRequest)
 		} else {
 			log.Printf("Error while querying user: %v", err)
-			http.Error(w, "internal server error", http.StatusInternalServerError)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		}
 
 		return
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(data.Password)); err != nil {
-		http.Error(w, "bad request", http.StatusBadRequest)
+		http.Error(w, "Bad request", http.StatusBadRequest)
 
 		return
 	}
@@ -53,7 +53,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	loadingErr := godotenv.Load()
 	if loadingErr != nil {
 		log.Printf("Error loading environment variables: %v", loadingErr)
-		http.Error(w, "internal server error", http.StatusInternalServerError)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 
 		return
 	}
@@ -68,7 +68,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 
 	if signingErr != nil {
 		log.Printf("Error Signing token: %v", signingErr)
-		http.Error(w, "internal server error", http.StatusInternalServerError)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 
 		return
 	}
