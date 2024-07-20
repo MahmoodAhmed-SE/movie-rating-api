@@ -18,3 +18,19 @@ const (
 	*/
 	UserIdKey contextKey = "user_id"
 )
+
+// errors
+const (
+	// PostgreSQL related
+	UniqueConstraintViolation string = "ERROR: duplicate key value violates unique constraint \"users_username_key\" (SQLSTATE 23505)"
+
+	// Movie rating API Logic related
+	ErrEmptyFilters            = "ERROR: no search filters are found for the operation of populating filters"
+	ErrRatingOutOfBounds       = "ERROR: rating is out of bounds (either less than 0 or more than 10)"
+	ErrIncorrectDurationFormat = "ERROR: incorrect duration format. duration format must be in the form of hh:mm exampe: 03:30"
+
+	ErrSearchFilterTitleIsNotString     = "ERROR: unexpected type of filter title in filters map. it must be string but it isn't"
+	ErrSearchFilterReleaseYearIsNotTime = "ERROR: unexpected type of filter release_year in filters map. it must be time.Time but it isn't"
+	ErrSearchFilterRatingIsNotFloat64   = "ERROR: unexpected type of filter rating in filters map. it must be float64 but it isn't"
+	ErrSearchFilterDirectorIsNotString
+)

@@ -3,8 +3,8 @@ package auth
 import (
 	"encoding/json"
 	"log"
+	constants "movie-rating-api-go/internals"
 	"movie-rating-api-go/internals/database"
-	"movie-rating-api-go/internals/psql_errors"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
@@ -42,7 +42,7 @@ func UserRegistration(w http.ResponseWriter, r *http.Request) {
 	// var userId int
 	var userId int
 	if err := insertionRow.Scan(&userId); err != nil {
-		if err.Error() == psql_errors.UniqueConstraintViolation {
+		if err.Error() == constants.UniqueConstraintViolation {
 			http.Error(w, "Username already exists!", http.StatusConflict)
 			return
 		}
