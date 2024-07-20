@@ -8,7 +8,7 @@
 <br><br>
 
 ## Background
-This project is made for the purpose of learning and practicing **Go language**, and the backend server side development. Its implementation is inspired by the user requirements you can find in <a href="https://github.com/MahmoodAhmed-SE/movie-rating-api-go/blob/main/user-requirements.md">user-requirements</a>. However, I will not follow the requirements strictly.
+This project is made for the purpose of learning and practicing **Go language**, and the backend server side development. Its implementation is inspired by the user requirements you can find in <a href="https://github.com/MahmoodAhmed-SE/movie-rating-api/blob/main/user-requirements.md">user-requirements</a>. However, I will not follow the requirements strictly.
 
 ### Note:
 <mark>For learning and testing purposes, free and open license films/videos will be used.</mark>
