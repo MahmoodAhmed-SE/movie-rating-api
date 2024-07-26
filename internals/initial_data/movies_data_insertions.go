@@ -96,6 +96,7 @@ func StartMovieStartupInsertions() {
 		if execErr != nil {
 			log.Fatalf("Error executing movie insertion: %v", execErr)
 		}
+		break
 	}
 
 }

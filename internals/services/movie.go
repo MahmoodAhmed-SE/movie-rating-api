@@ -17,6 +17,16 @@ type rating struct {
 	Rating float32 `json:"rating"`
 }
 
+type MovieCreationReqBody struct {
+	Name           string           `json:"name"`
+	Description    string           `json:"description"`
+	Images         []sql.NullString `json:"images"`
+	Release_date   sql.NullTime     `json:"release_date"`
+	Director       sql.NullString   `json:"director"`
+	Rating_average sql.NullFloat64  `json:"rating_average"`
+	Duration       sql.NullInt32    `json:"duration"`
+}
+
 func GetUserRating(userId int, movieId int) (float32, error) {
 	conn := database.GetConn()
 
@@ -174,3 +184,31 @@ func GetMoviesWithFilter(filters *map[string]interface{}) (*pgx.Rows, error) {
 
 	return rows, nil
 }
+
+
+/*
+movie table definition:
+
+CREATE TABLE IF NOT EXISTS MOVIES (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    description TEXT NOT NULL,
+    images TEXT[],
+    release_date DATE,
+    director VARCHAR(100),
+    rating_average NUMERIC(3, 2) DEFAULT 0.0,
+    duration INT -- duration in minutes
+);
+*/
+
+func AddMovie(movie *MovieCreationReqBody) {
+	query := "INSERT INTO MOVIES VALUES($1, $2, $3, $4, $5, $6, $7);"
+
+	conn := database.GetConn()
+
+	if tag, err := conn.Exec(query, ); err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		log.Printf("Error while returning connection in movie service: %v", err)
+		return
+	}
+} 
