@@ -26,24 +26,24 @@ This project is made for the purpose of learning and practicing **Go language**,
 - **/v1/retrieve-movies**: Retrieve a list of movies.
 - **/v1/rate-movie**: Rate a movie or update the rating.
 - **/v1/search-movie**: Search for a movie.
-- **/v1/create-movie**: Create a new movie.
+- ~~**/v1/create-movie**: Create a new movie.~~ -- X Not related to topic
 - **/v1/get-movie-info**: Retrieve information about a specific movie.
 
 ### User Interaction:
 
 - **/v1/chat-on-movie**: Send or retrieve chat messages for a specific movie.
-- **/v1/watch-movie**: Stream a movie for a user.
+- ~~**/v1/watch-movie**: Stream a movie for a user.~~ -- X Not related to topic
 - **/v1/add-to-watchlist**: Add a movie to the user's watchlist.
 - **/v1/comment-on-movie**: Post a comment on a movie.
 - **/v1/favorite-movie**: Mark a movie as a favorite.
 
-### Live Broadcasting:
+### ~~Live Broadcasting:~~ -- X Not related to topic
 
-- **/v1/start-live-broadcast**: Start broadcasting a live movie.
-- **/v1/stop-live-broadcast**: Stop broadcasting a live movie.
-- **/v1/live-chat**: Send or retrieve live chat messages during a live broadcast.
-- **/v1/track-viewers**: Track the number of viewers for a live broadcast.
-- **/v1/track-live-rating**: Track and update the average rating during a live broadcast.
+- ~~**/v1/start-live-broadcast**: Start broadcasting a live movie.~~
+- ~~**/v1/stop-live-broadcast**: Stop broadcasting a live movie.~~
+- ~~**/v1/live-chat**: Send or retrieve live chat messages during a live broadcast.~~
+- ~~**/v1/track-viewers**: Track the number of viewers for a live broadcast.~~
+- ~~**/v1/track-live-rating**: Track and update the average rating during a live broadcast.~~
 
 ### Analytics and Recommendations:
 
@@ -52,4 +52,4 @@ This project is made for the purpose of learning and practicing **Go language**,
 
 ### Notifications:
 
-- **/v1/send-notification**: Send notifications to users about live events or new movie releases.
+- ~~**/v1/send-notification**: Send notifications to users about live events or new movie releases.~~ -- X Not related to topic
