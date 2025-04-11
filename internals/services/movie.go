@@ -201,14 +201,14 @@ CREATE TABLE IF NOT EXISTS MOVIES (
 );
 */
 
-func AddMovie(movie *MovieCreationReqBody) {
-	query := "INSERT INTO MOVIES VALUES($1, $2, $3, $4, $5, $6, $7);"
+// func AddMovie(movie *MovieCreationReqBody) {
+// 	query := "INSERT INTO MOVIES VALUES($1, $2, $3, $4, $5, $6, $7);"
 
-	conn := database.GetConn()
+// 	conn := database.GetConn()
 
-	if tag, err := conn.Exec(query, ); err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		log.Printf("Error while returning connection in movie service: %v", err)
-		return
-	}
-} 
+// 	if tag, err := conn.Exec(query, ); err != nil {
+// 		http.Error(w, "Internal server error", http.StatusInternalServerError)
+// 		log.Printf("Error while returning connection in movie service: %v", err)
+// 		return
+// 	}
+// } 

@@ -25,15 +25,17 @@ func LoadConfig() Config {
 	_, errUserEnv:= os.LookupEnv(constants.EnvDBUser)
 	_, errPassEnv:= os.LookupEnv(constants.EnvDBPass)
 	if !errUserEnv {
-		log.Fatalf("DB User environment variable error: %v", errUserEnv)
+		log.Println("DB User .env variable error. Using System environment variables.")
+		os.Getenv(constants.EnvDBUser)
 	}
 	if !errPassEnv {
-		log.Fatalf("DB Pass environment variable error: %v", errPassEnv)
+		log.Println("DB Pass .env variable error. Using System environment variables.")
+		os.Getenv(constants.EnvDBPass)
 	}
 
 	
 	if err != nil {
-		log.Fatalf("Error loading environment variables: %v", err)
+		log.Println("Error loading .env variables: %v", err)
 	}
 
 	postgresConfig := pgx.ConnConfig{

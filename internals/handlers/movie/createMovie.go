@@ -1,11 +1,11 @@
 package movie
 
 import (
-	"net/http"
-	"encoding/json"
-	"log"
+	// "net/http"
+	// "encoding/json"
+	// "log"
+	// "movie-rating-api-go/internals/services"
 	"database/sql"
-	"movie-rating-api-go/internals/services"
 )
 
 type MovieCreationReqBody struct {
@@ -19,21 +19,21 @@ type MovieCreationReqBody struct {
 }
 
 
-func CreateMovie(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+// func CreateMovie(w http.ResponseWriter, r *http.Request) {
+// 	defer r.Body.Close()
 	
-	decoder := json.NewDecoder(r.Body)
+// 	decoder := json.NewDecoder(r.Body)
 
-	var movie MovieCreationReqBody 
-	if err := decoder.Decode(&movie); err != nil {
-		http.Error(w, "Bad request", http.StatusBadRequest)
-		log.Printf("Error decoding body: %v", err)
-		return
-	}
+// 	var movie MovieCreationReqBody 
+// 	if err := decoder.Decode(&movie); err != nil {
+// 		http.Error(w, "Bad request", http.StatusBadRequest)
+// 		log.Printf("Error decoding body: %v", err)
+// 		return
+// 	}
 
-	if err := services.AddMovie(&movie); err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		log.Printf("Error inserting a created movie to database: %v", err)
-		return
-	}
-}
+// 	if err := services.AddMovie(&movie); err != nil {
+// 		http.Error(w, "Internal server error", http.StatusInternalServerError)
+// 		log.Printf("Error inserting a created movie to database: %v", err)
+// 		return
+// 	}
+// }
