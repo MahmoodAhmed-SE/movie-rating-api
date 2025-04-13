@@ -1,0 +1,18 @@
+services:
+  api: 
+    build: ./api/
+    depends_on:
+      - db
+    ports:
+      - 4040:4040
+    env_file:
+      - .env
+  db:
+    image: postgres:15
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+volumes:
+  db_data:
