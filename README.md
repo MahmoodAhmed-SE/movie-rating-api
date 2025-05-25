@@ -34,8 +34,9 @@ This project is made for the purpose of learning and practicing **Go language**,
 - **/v1/chat-on-movie**: Send or retrieve chat messages for a specific movie.
 - ~~**/v1/watch-movie**: Stream a movie for a user.~~ -- X Not related to topic
 - **/v1/add-to-watchlist**: Add a movie to the user's watchlist.
-- **/v1/comment-on-movie**: Post a comment on a movie.
+- **/v1/retrieve-watchlist**: retrieve watchlist items for said user.
 - **/v1/favorite-movie**: Mark a movie as a favorite.
+- **/v1/retrieve-favorite-movies**: Retrieve all favorite movies for said user.
 
 ### ~~Live Broadcasting:~~ -- X Not related to topic
 
