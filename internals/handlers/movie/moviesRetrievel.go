@@ -29,11 +29,6 @@ func MoviesRetrievel(w http.ResponseWriter, r *http.Request) {
 			&movie.Id,
 			&movie.Name,
 			&movie.Description,
-			&movie.Images,
-			&movie.Release_date,
-			&movie.Director,
-			&movie.Rating_average,
-			&movie.Duration,
 		); scanningErr != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			log.Printf("Error scanning to movie model %v", scanningErr)

@@ -91,11 +91,6 @@ func populate_movies(movies *[]models.Movie, filters *map[string]interface{}) er
 			&movie.Id,
 			&movie.Name,
 			&movie.Description,
-			&movie.Images,
-			&movie.Release_date,
-			&movie.Rating_average,
-			&movie.Director,
-			&movie.Duration,
 		); scnErr != nil {
 			log.Printf("Error while scanning rows returned from GetMoviesWithFilter into models.Movie: %v", scnErr)
 			return err
