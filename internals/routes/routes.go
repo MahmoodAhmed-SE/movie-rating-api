@@ -17,6 +17,6 @@ func SetupRoutes() http.Handler {
 	mux.Handle("/api/v1/rate-movie", middlewares.JWTAuthorization(http.HandlerFunc(movie.RatingMovie)))
 	mux.Handle("/api/v1/search-movie", middlewares.JWTAuthorization(http.HandlerFunc(movie.SearchMovie)))
 	mux.Handle("/api/v1/get-movie-info", middlewares.JWTAuthorization(http.HandlerFunc(movie.GetMovieInfo)))
-
+	mux.Handle("/api/v1/chat-on-movie", middlewares.JWTAuthorization(http.HandlerFunc(movie.ChatOnMovie)))
 	return mux
 }
