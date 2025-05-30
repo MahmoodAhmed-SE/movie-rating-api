@@ -5,16 +5,19 @@ import (
 	"log"
 	"movie-rating-api-go/internals/database"
 	"net/http"
-	"github.com/gorilla/mux"
+	constants "movie-rating-api-go/internals"
+
+	
+	"database/sql"
 )
 
 
-type ChatItem struct {
-	UserId      string `json:"user_id"`
-	MovieId     string `json:"movie_id"`
-	TextContent string `json:"text_content"`
-	CreatedAt   string `json:"created_at"`
+type PostReqBodyChatOnMovie struct {
+	MovieId int `json:"movie_id"`
+	Message string `json:"message"`
 }
+
+
 
 // current logic: retrieve the chats of said movie_id (TODO: needs to be changed)
 func ChatOnMovie(w http.ResponseWriter, r *http.Request) {
@@ -22,46 +25,50 @@ func ChatOnMovie(w http.ResponseWriter, r *http.Request) {
 
 	reqMethod := r.Method
 
-	if reqMethod == http.MethodGet {
-		vars := mux.Vars(r)
-		movieId := vars["movieId"]
+	if reqMethod == http.MethodPost {
+		decoder := json.NewDecoder(r.Body)
 
+		var reqBody PostReqBodyChatOnMovie
 
+		if err := decoder.Decode(&reqBody); err != nil {
+			http.Error(w, "Bad Request", http.StatusBadRequest)
+			log.Printf("Error while decoding request body of PostReqBodyChatOnMovie: %v", err)
+			return
+		}
+
+		
 		conn := database.GetConn()
 
-		rows, err := conn.Query("SELECT user_id, movie_id, text_content, created_at FROM CHATS WHERE movie_id = $1;", movieId)
-
-		if err != nil {
-			log.Printf("Error while querying chats using select statement in ChatOnMovie: %v", err)
-			http.Error(w, "Internal Server Error!", http.StatusInternalServerError)
-			return
-		}
-
-		defer rows.Close()
-
-		var chats []ChatItem
-
-		for rows.Next() {
-			var chatItem ChatItem
-
-			if err := rows.Scan(&chatItem.MovieId, &chatItem.UserId, &chatItem.TextContent, &chatItem.CreatedAt); err != nil {
-				log.Printf("Error while using Scan to encode returned values of db to ChatItem sturct: %v", err)
-				http.Error(w, "Internal Server Error!", http.StatusInternalServerError)
-				return
+		// check if movie with provided movie_id exists in db
+		var assumedId int
+		if err := conn.QueryRow("SELECT 1 FROM MOVIES WHERE id = $1;", reqBody.MovieId).Scan(&assumedId); err != nil {
+			if err == sql.ErrNoRows {
+				http.Error(w, "Not Found", http.StatusNotFound)
+				log.Printf("Error querying movie with id %v: %v", reqBody.MovieId, err)
+				} else {
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+				log.Printf("Error querying movie with id %v: %v", reqBody.MovieId, err)				
 			}
-
-			chats = append(chats, chatItem)
-		}
-
-		log.Println(chats)
-
-		encoder := json.NewEncoder(w)
-
-		if err := encoder.Encode(chats); err != nil {
-			log.Printf("Error while encoding chats to json in ChatOnMovie: %v", err)
-			http.Error(w, "Internal Server Error!", http.StatusInternalServerError)
+			
 			return
 		}
+
+		userId, ok := r.Context().Value(constants.UserIdKey).(int)
+		if !ok {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			log.Println("User id is not accessible in the context even though the user accessed the handler [ChatOnMovie] and reached this code. Check authorization middleware where we handle the context for subsequent handlers")
+			return
+		}
+
+
+		if _, err := conn.Exec("INSERT INTO CHATS(id, movie_id, user_id, text_content, created_at) VALUES(DEFAULT, $1, $2, $3, DEFAULT);", reqBody.MovieId, userId, reqBody.Message); err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error while inserting a chat into chats table: %v", err)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Chat is posted successfully!"))		
 	} else {
 		log.Printf("Method Not Allowed: %s", reqMethod)
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
