@@ -38,7 +38,6 @@ func ChatOnMoviePathQuery(w http.ResponseWriter, r *http.Request) {
 
 		for rows.Next() {
 			var chatItem models.ChatItem
-
 			if err := rows.Scan(&chatItem.MovieId, &chatItem.UserId, &chatItem.TextContent, &chatItem.CreatedAt); err != nil {
 				log.Printf("Error while using Scan to encode returned values of db to ChatItem sturct: %v", err)
 				http.Error(w, "Internal Server Error!", http.StatusInternalServerError)
