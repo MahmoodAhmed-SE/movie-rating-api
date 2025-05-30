@@ -7,7 +7,6 @@ import (
 	"movie-rating-api-go/internals/database"
 	initialdata "movie-rating-api-go/internals/initial_data"
 
-	// initialdata "movie-rating-api-go/internals/initial_data"
 	"movie-rating-api-go/internals/routes"
 	"net/http"
 )
@@ -25,12 +24,12 @@ func main() {
 	//
 	initialdata.StartMovieStartupInsertions()
 
-	mux := routes.SetupRoutes()
+	muxRouter := routes.SetupRoutes()
 
 	log.Printf("Server is starting up on port: %d", config.ServerConfig.Port)
 
 	address := fmt.Sprintf("%s:%d", config.ServerConfig.IP, config.ServerConfig.Port)
-	if err := http.ListenAndServe(address, mux); err != nil {
+	if err := http.ListenAndServe(address, muxRouter); err != nil {
 		log.Fatalf("Error starting server: %s", err)
 	}
 
