@@ -3,21 +3,17 @@ package movie
 import (
 	"encoding/json"
 	"log"
+	constants "movie-rating-api-go/internals"
 	"movie-rating-api-go/internals/database"
 	"net/http"
-	constants "movie-rating-api-go/internals"
 
-	
 	"database/sql"
 )
 
-
 type PostReqBodyChatOnMovie struct {
-	MovieId int `json:"movie_id"`
+	MovieId int    `json:"movie_id"`
 	Message string `json:"message"`
 }
-
-
 
 // current logic: retrieve the chats of said movie_id (TODO: needs to be changed)
 func ChatOnMovie(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +32,6 @@ func ChatOnMovie(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		
 		conn := database.GetConn()
 
 		// check if movie with provided movie_id exists in db
@@ -45,11 +40,11 @@ func ChatOnMovie(w http.ResponseWriter, r *http.Request) {
 			if err == sql.ErrNoRows {
 				http.Error(w, "Not Found", http.StatusNotFound)
 				log.Printf("Error querying movie with id %v: %v", reqBody.MovieId, err)
-				} else {
+			} else {
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-				log.Printf("Error querying movie with id %v: %v", reqBody.MovieId, err)				
+				log.Printf("Error querying movie with id %v: %v", reqBody.MovieId, err)
 			}
-			
+
 			return
 		}
 
@@ -60,15 +55,14 @@ func ChatOnMovie(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-
 		if _, err := conn.Exec("INSERT INTO CHATS(id, movie_id, user_id, text_content, created_at) VALUES(DEFAULT, $1, $2, $3, DEFAULT);", reqBody.MovieId, userId, reqBody.Message); err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			log.Println("Error while inserting a chat into chats table: %v", err)
+			log.Printf("Error while inserting a chat into chats table: %v", err)
 			return
 		}
 
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Chat is posted successfully!"))		
+		w.Write([]byte("Chat is posted successfully!"))
 	} else {
 		log.Printf("Method Not Allowed: %s", reqMethod)
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
