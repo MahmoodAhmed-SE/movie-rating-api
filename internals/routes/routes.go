@@ -11,17 +11,30 @@ import (
 )
 
 func SetupRoutes() http.Handler {
-	r := mux.NewRouter()
-	r.HandleFunc("/api/v1/register-user", auth.UserRegistration)
-	r.HandleFunc("/api/v1/login-user", auth.UserLogin)
+	jwtAuth := middlewares.JWTAuthorization
+	router := mux.NewRouter()
 
-	r.Handle("/api/v1/retrieve-movies", middlewares.JWTAuthorization(http.HandlerFunc(movie.MoviesRetrievel)))
-	r.Handle("/api/v1/rate-movie", middlewares.JWTAuthorization(http.HandlerFunc(movie.RatingMovie)))
-	r.Handle("/api/v1/search-movie", middlewares.JWTAuthorization(http.HandlerFunc(movie.SearchMovie)))
-	r.Handle("/api/v1/get-movie-info", middlewares.JWTAuthorization(http.HandlerFunc(movie.GetMovieInfo)))
-	r.Handle("/api/v1/chat-on-movie", middlewares.JWTAuthorization(http.HandlerFunc(movie.ChatOnMovie)))
-	r.Handle("/api/v1/chat-on-movie/{movieId}", middlewares.JWTAuthorization(http.HandlerFunc(movie.ChatOnMoviePathQuery)))
-	r.Handle("/api/v1/watchlist", middlewares.JWTAuthorization(http.HandlerFunc(movie.Watchlist)))
+	// User Management
+	router.HandleFunc("/api/v1/register-user", auth.UserRegistration) // POST
+	router.HandleFunc("/api/v1/login-user", auth.UserLogin)           // POST
 
-	return r
+	// Movie Management:
+	router.Handle("/api/v1/movies", jwtAuth(http.HandlerFunc(movie.MoviesRetrievel)))        // GET
+	router.Handle("/api/v1/movies/{movieId}", jwtAuth(http.HandlerFunc(movie.GetMovieInfo))) // GET
+
+	router.Handle("/api/v1/movies-rating", jwtAuth(http.HandlerFunc(movie.RatingMovie))) // POST
+	// router.Handle("/api/v1/movies-rating/{movieId}", jwtAuth(http.HandlerFunc(movie.RatingMovie))) // GET
+	// router.Handle("/api/v1/search/{movieName}", jwtAuth(http.HandlerFunc(movie.SearchMovie))) // GET
+
+	// User Interaction:
+
+	router.Handle("/api/v1/chat-on-movie", jwtAuth(http.HandlerFunc(movie.ChatOnMovie)))                    // POST
+	router.Handle("/api/v1/chat-on-movie/{movieId}", jwtAuth(http.HandlerFunc(movie.ChatOnMoviePathQuery))) // GET
+	router.Handle("/api/v1/watchlist", jwtAuth(http.HandlerFunc(movie.Watchlist)))                          // GET, POST
+
+	// Analytics and Recommendations
+	// api/v1/recommend-movies
+	// api/v1/get-viewer-stats
+
+	return router
 }

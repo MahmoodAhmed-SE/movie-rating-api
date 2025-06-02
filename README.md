@@ -1,4 +1,4 @@
-<h1 align="center">Movie Rating API</h1>
+<h1 align="center", style="font-size: 50px;">Movie Rating API</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/GO-1.22.4-blue?style=for-the-badge" />
@@ -7,7 +7,7 @@
 </p>
 <br><br>
 
-## Background
+# Background
 This project is made for the purpose of learning and practicing **Go language**, and the backend server side development. Its implementation is inspired by the user requirements you can find in <a href="https://github.com/MahmoodAhmed-SE/movie-rating-api/blob/main/user-requirements.md">user-requirements</a>. However, I will not follow the requirements strictly.
 
 ### Note:
@@ -15,42 +15,33 @@ This project is made for the purpose of learning and practicing **Go language**,
 
 <br><br>
 
-## Featuring
-### User Management:
+## 📌 Featuring
 
-- **/v1/register-user**: Register a new user.
-- **/v1/login-user**: Log in a user.
+---
 
-### Movie Management:
+### 👤 User Management
+- **POST `/api/v1/register-user`** — Register a new user.
+- **POST `/api/v1/login-user`** — Authenticate and log in a user.
 
-- **/v1/retrieve-movies**: Retrieve a list of movies.
-- **/v1/rate-movie**: Rate a movie or update the rating.
-- **/v1/search-movie**: Search for a movie.
-- ~~**/v1/create-movie**: Create a new movie.~~ -- X Not related to topic
-- **/v1/get-movie-info**: Retrieve information about a specific movie.
+---
 
-### User Interaction:
+### 🎬 Movie Management
+- **GET `/api/v1/movies`** — Retrieve a list of all available movies.
+- **GET `/api/v1/movies/{movieId}`** — Get detailed information about a specific movie.
+- **GET `/api/v1/movies-rating/{movieId}`** — Fetch the average rating of a specific movie.
+- **GET `/api/v1/chat-on-movie/{movieId}`** — View chat messages related to a specific movie.
+- **GET `/api/v1/search/{movieName}`** — 🔧 *[Planned]* Search for a movie by name.¹
 
-- **/v1/chat-on-movie**: Send or retrieve chat messages for a specific movie.
-- ~~**/v1/watch-movie**: Stream a movie for a user.~~ -- X Not related to topic
-- **/v1/add-to-watchlist**: Add a movie to the user's watchlist.
-- **/v1/retrieve-watchlist**: retrieve watchlist items for said user.
-- **/v1/favorite-movie**: Mark a movie as a favorite.
-- **/v1/retrieve-favorite-movies**: Retrieve all favorite movies for said user.
+---
 
-### ~~Live Broadcasting:~~ -- X Not related to topic
+### 🤝 User Interaction
+- **POST `/api/v1/movies-rating`** — Submit a movie rating.
+- **POST `/api/v1/chat-on-movie`** — Post a message in a movie's chat.
+- **POST `/api/v1/watchlist`** — Add a movie to the user's watchlist.
+- **GET `/api/v1/watchlist`** — Retrieve the authenticated user's watchlist.
 
-- ~~**/v1/start-live-broadcast**: Start broadcasting a live movie.~~
-- ~~**/v1/stop-live-broadcast**: Stop broadcasting a live movie.~~
-- ~~**/v1/live-chat**: Send or retrieve live chat messages during a live broadcast.~~
-- ~~**/v1/track-viewers**: Track the number of viewers for a live broadcast.~~
-- ~~**/v1/track-live-rating**: Track and update the average rating during a live broadcast.~~
-
-### Analytics and Recommendations:
-
-- **/v1/recommend-movies**: Recommend movies to a user based on their preferences and behavior.
-- **/v1/get-viewer-stats**: Retrieve statistics about viewer engagement and behavior.
-
-### Notifications:
-
-- ~~**/v1/send-notification**: Send notifications to users about live events or new movie releases.~~ -- X Not related to topic
+---
+🔧 *[planned]*
+### 📊 Analytics & Recommendations
+- **GET `/api/v1/recommend-movies`** — Get personalized movie recommendations.
+- **GET `/api/v1/get-viewer-stats`** — Retrieve statistics on viewer behavior and engagement.
