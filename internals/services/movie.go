@@ -43,13 +43,13 @@ func GetUserRating(userId int, movieId int) (float32, error) {
 	return r.Rating, nil
 }
 
-func RateMovie(userId int, movieId int, rate float32, review sql.NullString) error {
+func RateMovie(userId int, movieId int, rate float32) error {
 	conn := database.GetConn()
 
 	_, err := conn.Exec(`
 		INSERT INTO RATINGS
-		VALUES(DEFAULT, $1, $2, $3, $4, DEFAULT);`,
-		userId, movieId, rate, review)
+		VALUES(DEFAULT, $1, $2, $3, DEFAULT);`,
+		userId, movieId, rate)
 
 	if err != nil {
 		return err
@@ -184,31 +184,3 @@ func GetMoviesWithFilter(filters *map[string]interface{}) (*pgx.Rows, error) {
 
 	return rows, nil
 }
-
-
-/*
-movie table definition:
-
-CREATE TABLE IF NOT EXISTS MOVIES (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    description TEXT NOT NULL,
-    images TEXT[],
-    release_date DATE,
-    director VARCHAR(100),
-    rating_average NUMERIC(3, 2) DEFAULT 0.0,
-    duration INT -- duration in minutes
-);
-*/
-
-// func AddMovie(movie *MovieCreationReqBody) {
-// 	query := "INSERT INTO MOVIES VALUES($1, $2, $3, $4, $5, $6, $7);"
-
-// 	conn := database.GetConn()
-
-// 	if tag, err := conn.Exec(query, ); err != nil {
-// 		http.Error(w, "Internal server error", http.StatusInternalServerError)
-// 		log.Printf("Error while returning connection in movie service: %v", err)
-// 		return
-// 	}
-// } 

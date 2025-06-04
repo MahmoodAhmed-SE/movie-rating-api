@@ -1,9 +1,7 @@
-package movie
+package rating
 
 import (
-	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log"
 	constants "movie-rating-api-go/internals"
 	"movie-rating-api-go/internals/services"
@@ -13,20 +11,20 @@ import (
 )
 
 type RatingRequestBody struct {
-	MovieId int            `json:"movie_id"`
-	Rating  float32        `json:"rating"`
-	Review  sql.NullString `json:"review"`
+	MovieId int     `json:"movie_id"`
+	Rating  float32 `json:"rating"`
 }
 
 func RatingMovie(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
-	user_id, ok := r.Context().Value(constants.UserIdKey).(int)
+	userId, ok := r.Context().Value(constants.UserIdKey).(int)
 	if !ok {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		log.Println("Error while parsing id passed from authorization middleware to string.")
 		return
 	}
+
 	decoder := json.NewDecoder(r.Body)
 	var data RatingRequestBody
 	if err := decoder.Decode(&data); err != nil {
@@ -35,11 +33,11 @@ func RatingMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rating, err := services.GetUserRating(user_id, data.MovieId)
+	_, err := services.GetUserRating(userId, data.MovieId)
 
 	// Check whether user has already rated this movie or an error occured while querying
 	if err == nil {
-		http.Error(w, fmt.Sprintf("Movie has already been rated with %v out of 10", rating), http.StatusConflict)
+		http.Error(w, "Movie has already been rated!", http.StatusConflict)
 		return
 	} else if err != pgx.ErrNoRows {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -47,7 +45,7 @@ func RatingMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rateErr := services.RateMovie(user_id, data.MovieId, data.Rating, data.Review)
+	rateErr := services.RateMovie(userId, data.MovieId, data.Rating)
 
 	if rateErr != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -56,4 +54,5 @@ func RatingMovie(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Rating has been submitted!"))
 }

@@ -10,6 +10,5 @@ type Rating struct {
 	User_id    sql.NullString `json:"user_id"`    // Can be null
 	Movie_id   int            `json:"movie_id"`   // Not null
 	Rating     float32        `json:"rating"`     // Not null
-	Review     sql.NullString `json:"review"`     // Can be null
 	Created_at time.Time      `json:"created_at"` // Default to current timestamp
 }
