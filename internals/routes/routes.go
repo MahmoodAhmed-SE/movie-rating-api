@@ -17,20 +17,20 @@ func SetupRoutes() http.Handler {
 	router := mux.NewRouter()
 
 	// User Management
-	router.HandleFunc("/api/v1/register-user", auth.UserRegistration) // POST
-	router.HandleFunc("/api/v1/login-user", auth.UserLogin)           // POST
+	router.HandleFunc("/api/v1/register-user", auth.UserRegistration).Methods("POST")
+	router.HandleFunc("/api/v1/login-user", auth.UserLogin).Methods("POST")
 
 	// Movie Management:
-	router.Handle("/api/v1/movies", jwtAuth(http.HandlerFunc(movie.MoviesRetrievel)))        // GET
-	router.Handle("/api/v1/movies/{movieId}", jwtAuth(http.HandlerFunc(movie.GetMovieInfo))) // GET
+	router.Handle("/api/v1/movies", jwtAuth(http.HandlerFunc(movie.MoviesRetrievel))).Methods("GET")
+	router.Handle("/api/v1/movies/{movieId}", jwtAuth(http.HandlerFunc(movie.GetMovieInfo))).Methods("GET")
 	router.Handle("/api/v1/movies-rating/{movieId}", jwtAuth(http.HandlerFunc(rating.GetRatingMovie))).Methods("GET")
 
-	// router.Handle("/api/v1/search/{movieName}", jwtAuth(http.HandlerFunc(movie.SearchMovie))) // GET
+	// router.Handle("/api/v1/search/{movieName}", jwtAuth(http.HandlerFunc(movie.SearchMovie))).Methods("GET")
 
 	// User Interaction:
 	router.Handle("/api/v1/movies-rating", jwtAuth(http.HandlerFunc(rating.RatingMovie))).Methods("POST")
-	router.Handle("/api/v1/chat-on-movie", jwtAuth(http.HandlerFunc(movie.ChatOnMovie)))                    // POST
-	router.Handle("/api/v1/chat-on-movie/{movieId}", jwtAuth(http.HandlerFunc(movie.ChatOnMoviePathQuery))) // GET
+	router.Handle("/api/v1/chat-on-movie", jwtAuth(http.HandlerFunc(movie.ChatOnMovie))).Methods("POST")
+	router.Handle("/api/v1/chat-on-movie/{movieId}", jwtAuth(http.HandlerFunc(movie.ChatOnMoviePathQuery))).Methods("GET")
 	
 	router.Handle("/api/v1/watchlist", jwtAuth(http.HandlerFunc(watchlist.PostWatchlist))).Methods("POST")
 	router.Handle("/api/v1/watchlist", jwtAuth(http.HandlerFunc(watchlist.GetWatchlist))).Methods("GET")
