@@ -45,9 +45,9 @@ func RatingMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rateErr := services.RateMovie(userId, data.MovieId, data.Rating)
+	
 
-	if rateErr != nil {
+	if err := services.RateMovie(userId, data.MovieId, data.Rating); err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		log.Printf("Error while querying inserting a rating: %v.", err)
 		return
