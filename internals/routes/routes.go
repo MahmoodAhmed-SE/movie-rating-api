@@ -22,15 +22,15 @@ func SetupRoutes() http.Handler {
 
 	// Movie Management:
 	router.Handle("/api/v1/movies", jwtAuth(http.HandlerFunc(movie.MoviesRetrievel))).Methods("GET")
-	router.Handle("/api/v1/movies/{movieId}", jwtAuth(http.HandlerFunc(movie.GetMovieInfo))).Methods("GET")
-	router.Handle("/api/v1/movies-rating/{movieId}", jwtAuth(http.HandlerFunc(rating.GetRatingMovie))).Methods("GET")
+	router.Handle("/api/v1/movies/{movieId:[0-9]+}", jwtAuth(http.HandlerFunc(movie.GetMovieInfo))).Methods("GET")
+	router.Handle("/api/v1/movies-rating/{movieId:[0-9]+}", jwtAuth(http.HandlerFunc(rating.GetRatingMovie))).Methods("GET")
 
 	router.Handle("/api/v1/search", jwtAuth(http.HandlerFunc(movie.SearchMovie))).Methods("GET")
 
 	// User Interaction:
 	router.Handle("/api/v1/movies-rating", jwtAuth(http.HandlerFunc(rating.RatingMovie))).Methods("POST")
 	router.Handle("/api/v1/chat-on-movie", jwtAuth(http.HandlerFunc(movie.ChatOnMovie))).Methods("POST")
-	router.Handle("/api/v1/chat-on-movie/{movieId}", jwtAuth(http.HandlerFunc(movie.ChatOnMoviePathQuery))).Methods("GET")
+	router.Handle("/api/v1/chat-on-movie/{movieId:[0-9]+}", jwtAuth(http.HandlerFunc(movie.ChatOnMoviePathQuery))).Methods("GET")
 
 	router.Handle("/api/v1/watchlist", jwtAuth(http.HandlerFunc(watchlist.PostWatchlist))).Methods("POST")
 	router.Handle("/api/v1/watchlist", jwtAuth(http.HandlerFunc(watchlist.GetWatchlist))).Methods("GET")
