@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"fmt"
 	"log"
 	"movie-rating-api-go/internals/config"
@@ -9,6 +10,7 @@ import (
 	"time"
 	"movie-rating-api-go/internals/routes"
 	"net/http"
+	"github.com/gorilla/handlers"
 )
 
 func main() {
@@ -21,10 +23,12 @@ func main() {
 	conn := database.GetConn()
 	defer conn.Close()
 
-	//
 	initialdata.StartMovieStartupInsertions()
 
 	muxRouter := routes.SetupRoutes()
+
+	// adding logging middleware
+	loggedRouter := handlers.LoggingHandler(os.Stdout, muxRouter) 
 
 	log.Printf("Server is starting up on port: %d", config.ServerConfig.Port)
 
@@ -32,7 +36,7 @@ func main() {
 
 	s := &http.Server{
 		Addr: address,
-		Handler: muxRouter,
+		Handler: loggedRouter,
 		ReadTimeout: 10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
