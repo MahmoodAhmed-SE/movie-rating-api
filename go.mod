@@ -13,7 +13,6 @@ require (
 require (
 	github.com/cockroachdb/apd v1.1.0 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
-	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/websocket v1.5.3
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
