@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        const conn = new WebSocket("ws://localhost:4040/api/v1/ws");
+        conn.onopen = () => {
+            console.log("opened!")
+            conn.send(JSON.stringify({
+                jwt_token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTAxMTU1MjMsImlkIjoxfQ.C_KrKlPUsMvZYrD8RouxNDB3o8Ku5jjviEByLwBviro"
+            }))
+        }
+        conn.onmessage = (ws, e) => {
+            console.log(ws.data);
+        }
+        conn.onclose= () => console.log("closed!")
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
