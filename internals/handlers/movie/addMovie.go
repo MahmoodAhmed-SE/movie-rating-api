@@ -1,31 +1,16 @@
 package movie
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"movie-rating-api-go/internals/database"
-	"movie-rating-api-go/internals/go_protobuffs"
+	"movie-rating-api-go/internals/services"
 	"net/http"
-	"strings"
-	"time"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 type httpRequst struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
-}
-
-func floatSliceToVectorLiteral(vec []float32) string {
-	strVals := make([]string, len(vec))
-	for i, v := range vec {
-		strVals[i] = fmt.Sprintf("%f", v)
-	}
-	return fmt.Sprintf("[%s]", strings.Join(strVals, ","))
 }
 
 func AddMovie(w http.ResponseWriter, r *http.Request) {
@@ -40,24 +25,10 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TO-DO: add all information of a movie to the description vec (name, directors, etc..)
 	// TO-DO: request body validation
 
-	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		http.Error(w, "Bad Gateway", http.StatusBadGateway)
-		log.Println(err)
-		return
-	}
-	defer conn.Close()
-
-	client := go_protobuffs.NewEmbedderClient(conn)
-
-	started := time.Now().UnixMilli()
-	resp, err := client.Embed(context.Background(), &go_protobuffs.EmbeddingRequest{
-		Text: reqBody.Description,
-	})
-	log.Println("Time taken:", time.Now().UnixMilli()-started)
-
+	description_vec, err := services.GetGrpcEmbeddingResp(reqBody.Description)
 	if err != nil {
 		http.Error(w, "Bad Gateway", http.StatusBadGateway)
 		log.Println(err)
@@ -65,8 +36,6 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 	}
 
 	dbConn := database.GetConn()
-
-	description_vec := floatSliceToVectorLiteral(resp.GetEmbedding())
 
 	_, err = dbConn.Exec("INSERT INTO movies(id, name, description, description_vec) VALUES(DEFAULT, $1, $2, $3);", reqBody.Name, reqBody.Description, description_vec)
 	if err != nil {
@@ -79,6 +48,7 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 	type httpResp struct {
 		Message string `json:"message"`
 	}
+
 	userResp, err := json.Marshal(&httpResp{
 		Message: "movie successfully added!",
 	})

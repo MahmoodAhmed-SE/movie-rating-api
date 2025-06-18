@@ -5,6 +5,7 @@ import (
 	"log"
 	"movie-rating-api-go/internals/database"
 	"movie-rating-api-go/internals/models"
+	"movie-rating-api-go/internals/services"
 	"net/http"
 	"strings"
 )
@@ -38,9 +39,15 @@ func SearchMovie(w http.ResponseWriter, r *http.Request) {
 		offset = data.PageNumber * rowsLimit
 	}
 
-	conn := database.GetConn()
+	nameVectorized, err := services.GetGrpcEmbeddingResp(name)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Printf("Error vectorizing name: %v", err)
+		return
+	}
 
-	rows, err := conn.Query("SELECT id, name, description FROM movies WHERE name ILIKE '%' || $1 || '%' LIMIT $2 OFFSET $3;", name, rowsLimit, offset)
+	conn := database.GetConn()
+	rows, err := conn.Query("SELECT id, name, description FROM movies ORDER BY description_vec <-> $1 LIMIT $2 OFFSET $3;", nameVectorized, rowsLimit, offset)
 
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

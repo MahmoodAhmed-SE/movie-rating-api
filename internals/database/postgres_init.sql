@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS MOVIES (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description TEXT NOT NULL,
-    description_vec vector(3) NOT NULL
+    description_vec vector(384) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS RATINGS (

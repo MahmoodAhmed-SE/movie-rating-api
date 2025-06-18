@@ -5,9 +5,9 @@ import (
 	"log"
 	"movie-rating-api-go/internals/database"
 	"movie-rating-api-go/internals/models"
+	"movie-rating-api-go/internals/services"
 	"os"
 
-	"github.com/jackc/pgx"
 	"github.com/joho/godotenv"
 )
 
@@ -17,16 +17,16 @@ func StartMovieStartupInsertions() {
 	}
 
 	// simple logic to check if there is already enough sample rows..
-	var conn *pgx.Conn = database.GetConn()
+	conn := database.GetConn()
 
-	if assurance, selectErr := conn.Query("SELECT * FROM MOVIES;"); selectErr != nil {
+	if rows, selectErr := conn.Query("SELECT * FROM MOVIES;"); selectErr != nil {
 		log.Fatalf("Error in select movies query: %v", selectErr)
 		return
 	} else {
-		defer assurance.Close()
+		defer rows.Close()
 
 		number_of_rows := 0
-		for assurance.Next() {
+		for rows.Next() {
 			number_of_rows++
 			if number_of_rows >= 50 {
 				break
@@ -44,28 +44,26 @@ func StartMovieStartupInsertions() {
 
 	moviesBytes, err := os.ReadFile("internals/initial_data/movies.json")
 	if err != nil {
-		log.Printf("Error reading movies file: %s", err)
+		log.Fatalf("Error reading movies file: %s", err)
 	}
 
-	if parsingErr := json.Unmarshal(moviesBytes, &movies); parsingErr != nil {
-		log.Printf("Error parsing movies json into movies array of Movie: %v", parsingErr)
+	if err = json.Unmarshal(moviesBytes, &movies); err != nil {
+		log.Fatalf("Error parsing movies json into movies array of Movie: %v", err)
 	}
 
-	log.Println("Initializing 50 movies for MOVIES table")
+	log.Println("Initializing movies for MOVIES table")
 	// insert rows to movies
 	for _, movie := range movies {
-		/*
-			name
-			description
-			images
-		*/
+		descriptionVec, err := services.GetGrpcEmbeddingResp(movie.Description)
+		if err != nil {
+			log.Fatalf("Error executing movie insertion grpc: %v", err)
+		}
 
-		_, execErr := conn.Exec("INSERT INTO MOVIES VALUES (DEFAULT, $1, $2);", movie.Name, movie.Description)
-		if execErr != nil {
-			log.Fatalf("Error executing movie insertion: %v", execErr)
-			break
+		_, err = conn.Exec("INSERT INTO MOVIES VALUES (DEFAULT, $1, $2, $3);", movie.Name, movie.Description, descriptionVec)
+		if err != nil {
+			log.Fatalf("Error executing movie insertion: %v", err)
 		}
 	}
-	log.Println("Finished Initializing 50 movies for MOVIES table!")
 
+	log.Println("Finished Initializing 50 movies for MOVIES table!")
 }
