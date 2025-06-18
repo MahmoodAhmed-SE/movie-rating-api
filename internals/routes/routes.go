@@ -23,6 +23,7 @@ func SetupRoutes() http.Handler {
 
 	// Movie Retrieval & Info
 	router.Handle("/api/v1/movies", jwtAuth(http.HandlerFunc(movie.MoviesRetrievel))).Methods("GET")
+	router.Handle("/api/v1/movies", jwtAuth(http.HandlerFunc(movie.AddMovie))).Methods("POST")
 	router.Handle("/api/v1/movies/{movieId:[0-9]+}", jwtAuth(http.HandlerFunc(movie.GetMovieInfo))).Methods("GET")
 	router.Handle("/api/v1/search", jwtAuth(http.HandlerFunc(movie.SearchMovie))).Methods("GET")
 

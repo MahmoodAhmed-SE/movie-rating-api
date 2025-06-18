@@ -1,0 +1,18 @@
+syntax = 'proto3';
+
+package protobuffs;
+
+option go_package = "./internals/go_protobuffs";
+
+service Embedder {
+    rpc Embed(EmbeddingRequest) returns (EmbeddingResponse);
+}
+
+message EmbeddingRequest {
+    string text = 1;
+}
+
+message EmbeddingResponse {
+    repeated float embedding = 1;
+}
+

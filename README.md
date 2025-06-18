@@ -27,6 +27,7 @@ This project is made for the purpose of learning and practicing **Go language**,
 
 ### 🎬 Movie Management
 - **GET `/api/v1/movies`** — Retrieve a list of all available movies.
+- **POST `/api/v1/movies`** — Post a movie.
 - **GET `/api/v1/movies/{movieId}`** — Get detailed information about a specific movie.
 - **GET `/api/v1/movies-rating/{movieId}`** — Fetch the average rating of a specific movie.
 - **GET `/api/v1/chat-on-movie/{movieId}`** — View chat messages related to a specific movie.
