@@ -17,8 +17,11 @@ This project is made for the purpose of learning and practicing **Go language**,
 
 ## 📌 Featuring
 
----
 
+### 🔍✨ Search Similarity Models 
+- <a href="https://huggingface.co/BAAI/bge-small-en-v1.5">BAAI/bge-small-en-v1.5</a>
+
+---
 ### 👤 User Management
 - **POST `/api/v1/register-user`** — Register a new user.
 - **POST `/api/v1/login-user`** — Authenticate and log in a user.
@@ -31,7 +34,7 @@ This project is made for the purpose of learning and practicing **Go language**,
 - **GET `/api/v1/movies/{movieId}`** — Get detailed information about a specific movie.
 - **GET `/api/v1/movies-rating/{movieId}`** — Fetch the average rating of a specific movie.
 - **GET `/api/v1/chat-on-movie/{movieId}`** — View chat messages related to a specific movie.
-- **GET `/api/v1/search/{movieName}`** — 🔧 *[Planned]* Search for a movie by name.¹
+- **POST `/api/v1/search`** — Search for a movie by name.
 
 ---
 
